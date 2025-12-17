@@ -12,7 +12,7 @@
 #define PROMPT "#cisfun$ "
 
 int run_shell(char *av0);
-int execute_command(char *cmd);
+int execute_command(char **argv);
 
 #endif /* SHELL_H */
 

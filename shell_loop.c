@@ -13,15 +13,13 @@ static void strip_newline(char *s)
 	if (s == NULL)
 		return;
 
-	i = 0;
-	while (s[i])
+	for (i = 0; s[i]; i++)
 	{
 		if (s[i] == '\n')
 		{
 			s[i] = '\0';
 			return;
 		}
-		i++;
 	}
 }
 
@@ -57,7 +55,7 @@ static char *trim_spaces(char *s)
 }
 
 /**
- * run_shell - simple shell loop (no args, no PATH, no builtins)
+ * run_shell - simple shell loop
  * @av0: program name (argv[0]) for error printing
  *
  * Return: 0 on exit
@@ -68,6 +66,8 @@ int run_shell(char *av0)
 	size_t len;
 	ssize_t nread;
 	int interactive;
+	char *argv[64];
+	int i;
 
 	line = NULL;
 	len = 0;
@@ -91,7 +91,20 @@ int run_shell(char *av0)
 		if (cmd[0] == '\0')
 			continue;
 
-		if (execute_command(cmd) == -1)
+		/* tokenize into argv[] */
+		i = 0;
+		argv[i] = strtok(cmd, " \t");
+		while (argv[i] != NULL && i < 63)
+		{
+			i++;
+			argv[i] = strtok(NULL, " \t");
+		}
+		argv[i] = NULL;
+
+		if (argv[0] == NULL)
+			continue;
+
+		if (execute_command(argv) == -1)
 			perror(av0);
 	}
 }
