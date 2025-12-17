@@ -1,0 +1,68 @@
+.TH SIMPLE_SHELL 1 "December 2025" "hsh" "User Commands"
+.SH NAME
+hsh \- simple UNIX command interpreter
+.SH SYNOPSIS
+.B hsh
+.RI [command\ file]
+.SH DESCRIPTION
+.B hsh
+is a small command interpreter that reads lines from standard input, tokenizes
+commands, resolves executables through the PATH, and executes them in child
+processes. It mirrors a subset of the standard shell behavior for educational
+purposes.
+.SH MODES
+.TP
+.B Interactive
+When stdin is a terminal, a prompt `($) ` is shown and each line is executed
+immediately.
+.TP
+.B Non\-interactive
+When input is piped or redirected from a file, commands are processed until
+EOF without showing the prompt.
+.SH BUILTINS
+.TP
+.B exit [status]
+Exit the shell with the provided status. If no status is given, the exit value
+of the last command is used.
+.TP
+.B env
+Print the current environment variables, one per line.
+.SH FILES
+.I shell.h
+Header defining shared types and function prototypes.
+.br
+.I man_1_simple_shell
+This manual page.
+.br
+.I AUTHORS
+List of contributors.
+.SH EXAMPLES
+Interactive session:
+.PP
+.RS
+.nf
+$ ./hsh
+($) ls -1
+($) /bin/echo "hello"
+($) exit 0
+.fi
+.RE
+.PP
+Non\-interactive:
+.PP
+.RS
+.nf
+echo "echo from pipe" | ./hsh
+.fi
+.RE
+.SH EXIT STATUS
+Returns the exit status of the last executed command, or the status supplied
+to the
+.B exit
+builtin.
+.SH SEE ALSO
+sh(1), execve(2), fork(2), getline(3)
+.SH AUTHORS
+Johnson <jamhalex@gmail.com>
+.br
+Joshua <please add your preferred email>
