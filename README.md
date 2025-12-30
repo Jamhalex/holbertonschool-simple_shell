@@ -4,6 +4,7 @@ simple_shell
 `hsh` is a minimal UNIX command interpreter built as part of the Holberton School simple_shell project. It supports basic command parsing, PATH resolution, and a small set of built-ins for portability testing.
 
 Features
+- Skips forking when a command cannot be resolved.
 - Interactive prompt `($) ` with line counting for error messages.
 - Executes commands found through the PATH or by absolute/relative path.
 - Handles interactive and non-interactive (piped/file) input.
