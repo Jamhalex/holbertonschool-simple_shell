@@ -8,7 +8,8 @@ hsh \- simple UNIX command interpreter
 .B hsh
 is a small command interpreter that reads lines from standard input, tokenizes
 commands, resolves executables through the PATH, and executes them in child
-processes. It mirrors a subset of the standard shell behavior for educational
+processes. If a command cannot be resolved, no child process is created and an
+error is reported. It mirrors a subset of the standard shell behavior for educational
 purposes.
 .SH MODES
 .TP
