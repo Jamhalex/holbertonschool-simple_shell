@@ -9,10 +9,11 @@
 #include <errno.h>
 #include <string.h>
 
-#define PROMPT "#cisfun$ "
+#define PROMPT "$"
 
 int run_shell(char *av0);
 int execute_command(char **argv);
+extern char **environ;
 
 #endif /* SHELL_H */
 

@@ -1,7 +1,5 @@
 #include "shell.h"
 
-extern char **environ;
-
 /**
  * has_slash - checks if command contains a '/'
  * @s: string to check
