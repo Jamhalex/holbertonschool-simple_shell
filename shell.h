@@ -16,6 +16,9 @@ int execute_command(char **argv);
 extern char **environ;
 char *resolve_path(char *cmd);
 void print_not_found(char *av0, unsigned int line, char *cmd);
+int handle_exit(char **argv, int *status);
+void strip_newline(char *s);
+char *trim_spaces(char *s);
 
 #endif /* SHELL_H */
 

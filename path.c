@@ -1,30 +1,39 @@
 #include "shell.h"
 
 /**
- * resolve_path - finds full path of a command using PATH
+ * build_full_path - builds full path from dir and cmd
+ * @dir: directory from PATH
  * @cmd: command name
- * Return: malloc'd full path if found, or NULL
+ *
+ * Return: malloc'd full path, or NULL on failure
  */
-
-char *resolve_path(char *cmd)
+static char *build_full_path(char *dir, char *cmd)
 {
-	char *path, *copy, *dir, *full;
+	char *full;
 	size_t len;
 
-	if (!cmd || !*cmd)
+	len = strlen(dir) + strlen(cmd) + 2;
+	full = malloc(len);
+	if (!full)
 		return (NULL);
 
-	/* If cmd contains '/', treat as a direct path */
-	if (strchr(cmd, '/'))
-	{
-		if (access(cmd, X_OK) == 0)
-			return (strdup(cmd));
-		return (NULL);
-	}
+	strcpy(full, dir);
+	strcat(full, "/");
+	strcat(full, cmd);
 
-	path = getenv("PATH");
-	if (!path)
-		return (NULL);
+	return (full);
+}
+
+/**
+ * search_in_path - search cmd in PATH string
+ * @path: PATH value
+ * @cmd: command name
+ *
+ * Return: malloc'd full path if found, otherwise NULL
+ */
+static char *search_in_path(char *path, char *cmd)
+{
+	char *copy, *dir, *full;
 
 	copy = strdup(path);
 	if (!copy)
@@ -33,17 +42,12 @@ char *resolve_path(char *cmd)
 	dir = strtok(copy, ":");
 	while (dir)
 	{
-		len = strlen(dir) + strlen(cmd) + 2;
-		full = malloc(len);
+		full = build_full_path(dir, cmd);
 		if (!full)
 		{
 			free(copy);
 			return (NULL);
 		}
-
-		strcpy(full, dir);
-		strcat(full, "/");
-		strcat(full, cmd);
 
 		if (access(full, X_OK) == 0)
 		{
@@ -58,3 +62,31 @@ char *resolve_path(char *cmd)
 	free(copy);
 	return (NULL);
 }
+
+/**
+ * resolve_path - Resolve a command to a full executable path using PATH.
+ * @cmd: Command name (e.g., "ls") or a path (e.g., "/bin/ls").
+ *
+ * Return: malloc'd string with resolved full path, otherwise NULL.
+ */
+char *resolve_path(char *cmd)
+{
+	char *path;
+
+	if (!cmd || !*cmd)
+		return (NULL);
+
+	if (strchr(cmd, '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (strdup(cmd));
+		return (NULL);
+	}
+
+	path = getenv("PATH");
+	if (!path || !*path)
+		return (NULL);
+
+	return (search_in_path(path, cmd));
+}
+
