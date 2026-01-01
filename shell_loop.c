@@ -1,119 +1,110 @@
 #include "shell.h"
 
 /**
- * strip_newline - removes trailing newline if present
- * @s: string to edit
+ * tokenize - split a command string into argv array
+ * @cmd: command string (modified in-place)
+ * @argv: array to fill
+ * @max: max number of args (including NULL)
+ *
+ * Return: 0 if argv[0] is NULL, 1 otherwise
  */
-
-static void strip_newline(char *s)
+static int tokenize(char *cmd, char **argv, int max)
 {
-	size_t i;
+	int i;
 
-	if (s == NULL)
-		return;
-
-	for (i = 0; s[i]; i++)
+	i = 0;
+	argv[i] = strtok(cmd, " \t");
+	while (argv[i] != NULL && i < (max - 1))
 	{
-		if (s[i] == '\n')
-		{
-			s[i] = '\0';
-			return;
-		}
+		i++;
+		argv[i] = strtok(NULL, " \t");
 	}
+	argv[i] = NULL;
+
+	if (argv[0] == NULL)
+		return (0);
+
+	return (1);
 }
 
 /**
- * trim_spaces - trims leading and trailing spaces/tabs
- * @s: string to trim
+ * read_command - reads and prepares a command line
+ * @line: buffer pointer for getline
+ * @len: buffer size for getline
+ * @cmd: pointer to trimmed command
+ * @interactive: 1 if interactive mode
+ * @line_count: command counter
  *
- * Return: pointer to first non-space char (inside s)
+ * Return: 1 if a command is ready, 0 if empty line, -1 on EOF
  */
-
-static char *trim_spaces(char *s)
+static int read_command(char **line, size_t *len, char **cmd,
+			int interactive, unsigned int *line_count)
 {
-	size_t end;
-	char *start;
+	ssize_t nread;
 
-	if (s == NULL)
-		return (NULL);
+	if (interactive)
+		write(STDOUT_FILENO, PROMPT, sizeof(PROMPT) - 1);
 
-	start = s;
-	while (*start == ' ' || *start == '\t')
-		start++;
+	nread = getline(line, len, stdin);
+	if (nread == -1)
+		return (-1);
 
-	if (*start == '\0')
-		return (start);
+	strip_newline(*line);
+	*cmd = trim_spaces(*line);
 
-	end = strlen(start);
-	while (end > 0 && (start[end - 1] == ' ' || start[end - 1] == '\t'))
-	{
-		start[end - 1] = '\0';
-		end--;
-	}
+	if ((*cmd)[0] == '\0')
+		return (0);
 
-	return (start);
+	(*line_count)++;
+	return (1);
 }
 
 /**
  * run_shell - simple shell loop
  * @av0: program name (argv[0]) for error printing
  *
- * Return: 0 on exit
+ * Return: 0 on exit (or status for "exit N")
  */
-
 int run_shell(char *av0)
 {
 	char *line, *cmd;
 	size_t len;
-	ssize_t nread;
 	int interactive;
 	char *argv[64];
-	int i;
 	unsigned int line_count;
-	line_count = 0;
-
-
+	int status;
+	int rc;
 
 	line = NULL;
 	len = 0;
 	interactive = isatty(STDIN_FILENO);
+	line_count = 0;
+	status = 0;
 
 	while (1)
 	{
-		if (interactive)
-			write(STDOUT_FILENO, PROMPT, sizeof(PROMPT) - 1);
-
-		nread = getline(&line, &len, stdin);
-		if (nread == -1)
+		rc = read_command(&line, &len, &cmd, interactive, &line_count);
+		if (rc == -1)
 		{
 			free(line);
 			return (0);
 		}
-
-		strip_newline(line);
-		cmd = trim_spaces(line);
-
-		if (cmd[0] == '\0')
+		if (rc == 0)
 			continue;
-			
-		line_count++;
 
-		/* tokenize into argv[] */
-		i = 0;
-		argv[i] = strtok(cmd, " \t");
-		while (argv[i] != NULL && i < 63)
+		if (!tokenize(cmd, argv, 64))
+			continue;
+
+		if (handle_exit(argv, &status))
 		{
-			i++;
-			argv[i] = strtok(NULL, " \t");
+			free(line);
+			return (status);
 		}
-		argv[i] = NULL;
-
-		if (argv[0] == NULL)
-			continue;
 
 		if (execute_command(argv) == -1)
 			print_not_found(av0, line_count, argv[0]);
-
 	}
+
+	return (0);
 }
 
