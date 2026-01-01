@@ -13,6 +13,7 @@
 
 int run_shell(char *av0);
 int execute_command(char **argv);
+extern char **environ;
 
 #endif /* SHELL_H */
 
