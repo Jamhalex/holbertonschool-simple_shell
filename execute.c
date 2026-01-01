@@ -135,16 +135,19 @@ int execute_command(char **argv)
 
 	if (pid == 0)
 	{
-   		 char *cmd_path;
+		char *cmd_path;
 
-		 cmd_path = resolve_path(argv[0]);
-    		 if (!cmd_path)
-        	    _exit(127);
+		cmd_path = resolve_path(argv[0]);
+		if (!cmd_path)
+		{
+			_exit(127);
+		}
 
-   		 execve(cmd_path, argv, environ);
-    		 free(cmd_path);
-    		 _exit(127);
+		execve(cmd_path, argv, environ);
+		free(cmd_path);
+		_exit(127);
 	}
+
 
 
 	if (wait(&status) == -1)
