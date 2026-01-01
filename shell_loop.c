@@ -1,11 +1,10 @@
 #include "shell.h"
 
-extern char **environ;
-
 /**
  * strip_newline - removes trailing newline if present
  * @s: string to edit
  */
+
 static void strip_newline(char *s)
 {
 	size_t i;
@@ -29,6 +28,7 @@ static void strip_newline(char *s)
  *
  * Return: pointer to first non-space char (inside s)
  */
+
 static char *trim_spaces(char *s)
 {
 	size_t end;
@@ -60,6 +60,7 @@ static char *trim_spaces(char *s)
  *
  * Return: 0 on exit
  */
+
 int run_shell(char *av0)
 {
 	char *line, *cmd;
