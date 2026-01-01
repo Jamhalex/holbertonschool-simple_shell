@@ -106,7 +106,11 @@ int run_shell(char *av0)
 			continue;
 
 		if (execute_command(argv) == -1)
-			perror(av0);
+			write(STDERR_FILENO, av0, strlen(av0));
+			write(STDERR_FILENO, ": ", 2);
+			write(STDERR_FILENO, argv[0], strlen(argv[0]));
+			write(STDERR_FILENO, ": not found\n", 12);
+
 	}
 }
 
