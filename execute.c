@@ -6,6 +6,7 @@
  *
  * Return: 1 if found, 0 otherwise
  */
+
 static int has_slash(const char *s)
 {
 	if (s == NULL)
@@ -27,6 +28,7 @@ static int has_slash(const char *s)
  *
  * Return: newly allocated full path, or NULL on failure
  */
+
 static char *build_path(const char *dir, const char *cmd)
 {
 	size_t dlen, clen;
@@ -56,6 +58,7 @@ static char *build_path(const char *dir, const char *cmd)
  *
  * Return: newly allocated full path, or NULL if not found
  */
+
 static char *resolve_command(const char *cmd)
 {
 	char *path_env, *path_copy, *token, *full;
@@ -112,6 +115,7 @@ static char *resolve_command(const char *cmd)
  *
  * Return: 0 on success, -1 on failure
  */
+
 int execute_command(char **argv)
 {
 	pid_t pid;
@@ -131,9 +135,17 @@ int execute_command(char **argv)
 
 	if (pid == 0)
 	{
-		execve(resolved, argv, environ);
-		_exit(127);
+   		 char *cmd_path;
+
+		 cmd_path = resolve_path(argv[0]);
+    		 if (!cmd_path)
+        	    _exit(127);
+
+   		 execve(cmd_path, argv, environ);
+    		 free(cmd_path);
+    		 _exit(127);
 	}
+
 
 	if (wait(&status) == -1)
 	{
