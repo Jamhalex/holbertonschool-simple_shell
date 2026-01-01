@@ -1,6 +1,23 @@
 #include "shell.h"
 
 /**
+ * get_path_from_environ - gets PATH value from environ
+ *
+ * Return: pointer to PATH value or NULL
+ */
+static char *get_path_from_environ(void)
+{
+	int i;
+
+	for (i = 0; environ[i]; i++)
+	{
+		if (strncmp(environ[i], "PATH=", 5) == 0)
+			return (environ[i] + 5);
+	}
+	return (NULL);
+}
+
+/**
  * build_full_path - builds full path from dir and cmd
  * @dir: directory from PATH
  * @cmd: command name
@@ -83,7 +100,7 @@ char *resolve_path(char *cmd)
 		return (NULL);
 	}
 
-	path = getenv("PATH");
+	path = get_path_from_environ();
 	if (!path || !*path)
 		return (NULL);
 
