@@ -33,7 +33,7 @@ int run_builtins(char **argv, int *status);
 int read_command(char **line, size_t *len, char **cmd,
 		int interactive, unsigned int *line_count);
 int tokenize_args(char *cmd, char **argv, int max);
-void run_external(char *av0, char **argv,
+int run_external(char *av0, char **argv,
 		unsigned int line_count);
 
 /* utils */

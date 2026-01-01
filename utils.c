@@ -51,6 +51,7 @@ char *trim_spaces(char *s)
 
 	return (start);
 }
+
 /**
  * tokenize_args - split a command string into argv array
  * @cmd: command string (modified in-place)
@@ -77,15 +78,22 @@ int tokenize_args(char *cmd, char **argv, int max)
 
 	return (1);
 }
+
 /**
  * run_external - run non-builtin commands and report not found
  * @av0: program name (argv[0])
  * @argv: argument vector
  * @line_count: command counter
+ *
+ * Return: 0 on success, 127 if command not found
  */
-void run_external(char *av0, char **argv, unsigned int line_count)
+int run_external(char *av0, char **argv, unsigned int line_count)
 {
 	if (execute_command(argv) == -1)
+	{
 		print_not_found(av0, line_count, argv[0]);
+		return (127);
+	}
+	return (0);
 }
 

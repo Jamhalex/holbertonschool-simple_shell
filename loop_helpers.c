@@ -61,7 +61,6 @@ int run_builtins(char **argv, int *status)
  */
 static int handle_line(char *av0, char *cmd, unsigned int line_count,
 		int *status)
-
 {
 	char *argv[64];
 	int rc;
@@ -76,7 +75,7 @@ static int handle_line(char *av0, char *cmd, unsigned int line_count,
 	if (rc == 1)
 		return (1);
 
-	run_external(av0, argv, line_count);
+	*status = run_external(av0, argv, line_count);
 	return (1);
 }
 
@@ -107,7 +106,7 @@ int shell_loop(char *av0)
 		if (rc == -1)
 		{
 			free(line);
-			return (0);
+			return (status);
 		}
 		if (rc == 0)
 			continue;
