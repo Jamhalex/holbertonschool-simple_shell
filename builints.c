@@ -46,3 +46,26 @@ int handle_exit(char **argv, int *status)
 	return (1);
 }
 
+/**
+ * handle_env - handles the "env" builtin
+ * @argv: arguments array
+ *
+ * Return: 1 if handled, 0 otherwise
+ */
+
+int handle_env(char **argv)
+{
+	int i;
+
+	if (!argv || !argv[0] || strcmp(argv[0], "env") != 0)
+		return (0);
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		write(STDOUT_FILENO, environ[i], strlen(environ[i]));
+		write(STDOUT_FILENO, "\n", 1);
+	}
+
+	return (1);
+}
+
