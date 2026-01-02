@@ -87,13 +87,15 @@ int tokenize_args(char *cmd, char **argv, int max)
  *
  * Return: 0 on success, 127 if command not found
  */
+
 int run_external(char *av0, char **argv, unsigned int line_count)
 {
-	if (execute_command(argv) == -1)
-	{
+	int rc;
+
+	rc = execute_command(argv);
+	if (rc == 127)
 		print_not_found(av0, line_count, argv[0]);
-		return (127);
-	}
-	return (0);
+
+	return (rc);
 }
 
