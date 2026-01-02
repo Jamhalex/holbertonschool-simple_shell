@@ -36,8 +36,8 @@ cat script.txt | ./hsh
 ```
 
 Built-ins
-- `exit [status]` – exit the shell with the given status (default: last command status).
-- `env` – print the current environment.
+- `exit [status]` ï¿½ exit the shell with the given status (default: last command status).
+- `env` ï¿½ print the current environment.
 
 Project Structure
 - shell.h: shared declarations and prototypes.
@@ -49,5 +49,5 @@ Notes
 - Errors are reported with the shell name and line count for easier debugging.
 
 Authors
-- Johnson (jamhalex@gmail.com)
-- Joshua (please add your preferred email)
+- Johnson Martinez <jamhalex@gmail.com>
+- Joshua Santiago <joshua.d.santiago92@gmail.com>

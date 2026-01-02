@@ -1,4 +1,4 @@
-.TH SIMPLE_SHELL 1 "December 2025" "hsh" "User Commands"
+.TH SIMPLE_SHELL 1 "January 2026" "hsh" "User Commands"
 .SH NAME
 hsh \- simple UNIX command interpreter
 .SH SYNOPSIS
@@ -66,4 +66,4 @@ sh(1), execve(2), fork(2), getline(3)
 .SH AUTHORS
 Johnson <jamhalex@gmail.com>
 .br
-Joshua <please add your preferred email>
+Joshua Santiago <joshua.d.santiago92@gmail.com>
