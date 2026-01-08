@@ -1,0 +1,25 @@
+.TH CD 1 "January 2026" "hsh" "User Commands"
+
+.SH NAME
+cd \- change the current working directory (hsh builtin)
+.SH SYNOPSIS
+.B cd
+.RI [dir]
+.SH DESCRIPTION
+The
+.B cd
+builtin changes the current working directory to
+.I dir .
+If no
+.I dir
+is provided, it uses the
+.B HOME
+environment variable and falls back to
+.B /
+when
+.B HOME
+is not set.
+.SH EXIT STATUS
+Returns 0 on success and 2 on failure.
+.SH SEE ALSO
+hsh(1)

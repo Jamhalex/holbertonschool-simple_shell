@@ -12,6 +12,9 @@ It reads commands from `stdin`, tokenizes them into an argument vector, resolves
 - **Built-ins**:
   - `exit [status]` (defaults to last command status)
   - `env`
+  - `cd [dir]` (uses `HOME`, falls back to `/`)
+  - `setenv KEY VALUE`
+  - `unsetenv KEY`
 - **Error format**: matches `/bin/sh` style and prints `argv[0]` with a line counter:
   - `./hsh: 1: qwerty: not found`
 
@@ -48,11 +51,14 @@ cat script.txt | ./hsh
 ## Built-ins
 - `exit [status]` - exit the shell with the given status (default: last command status).
 - `env` - print the current environment.
+- `cd [dir]` - change the current working directory.
+- `setenv KEY VALUE` - set or overwrite an environment variable.
+- `unsetenv KEY` - remove an environment variable.
 
 ## Behavior details (reviewer notes)
 
 - **Exit status**:
-  - If a command executes, `hsh` returns that command’s exit status.
+  - If a command executes, `hsh` returns that command's exit status.
   - If a command is not found, `hsh` returns **127**.
   - `exit` with no argument exits with the **last command status**.
 - **Non-interactive mode**:
@@ -63,6 +69,8 @@ cat script.txt | ./hsh
   - A new prompt is displayed and the shell continues running.
 - **Limitations**:
   - Does not support pipes (`|`), quotes, or command chaining.
+- **Comments**:
+  - Lines beginning with `#` after trimming leading spaces are ignored.
 
 ## Files
 
@@ -72,11 +80,29 @@ cat script.txt | ./hsh
 - `path.c`: `PATH` searching
 - `execute.c`: `fork()`/`execve()` execution
 - `builtins.c`: builtin commands (`exit`, `env`)
+- `builtins_extra.c`: extra builtins (`cd`, `setenv`, `unsetenv`)
 - `errors.c`: error printing
 - `man_1_simple_shell`: manual page
+- `man/`: local `man` page tree (`man/man1`)
 - `AUTHORS`: contributors
 
-## Authors
-- Johnson Martinez <jamhalex@gmail.com>
-- Joshua Santiago <joshua.d.santiago92@gmail.com>
+## Man pages
 
+From the repo root, you can view the main manual with:
+
+```bash
+man -l man_1_simple_shell
+```
+
+To enable `man hsh` and builtin pages (like `man cd`) without installing
+system-wide, set a local `MANPATH`:
+
+```bash
+export MANPATH="$PWD/man:$MANPATH"
+man hsh
+man cd
+```
+
+## Authors
+- Johnson Martinez <jamhalex@gmail.com> (GitHub: https://github.com/Jamhalex)
+- Joshua Santiago <joshua.d.santiago92@gmail.com> (LinkedIn: https://www.linkedin.com/in/joshua-santiago-a268191b6/, GitHub: https://github.com/Rionhaato)
