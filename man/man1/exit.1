@@ -1,0 +1,19 @@
+.TH EXIT 1 "January 2026" "hsh" "User Commands"
+
+.SH NAME
+exit \- exit the shell (hsh builtin)
+.SH SYNOPSIS
+.B exit
+.RI [status]
+.SH DESCRIPTION
+The
+.B exit
+builtin terminates the shell. If a numeric
+.I status
+is provided, it is used as the exit status. When no argument is given, the
+exit status of the last command is used.
+.SH EXIT STATUS
+Returns the provided status modulo 256, the last command status when omitted,
+or 2 when a non-numeric status is supplied.
+.SH SEE ALSO
+hsh(1)
