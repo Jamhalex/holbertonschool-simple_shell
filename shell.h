@@ -40,5 +40,10 @@ int run_external(char *av0, char **argv,
 void strip_newline(char *s);
 char *trim_spaces(char *s);
 
+/* test suite p*/
+int handle_cd(char **argv, int *status);
+int handle_setenv(char **argv, int *status);
+int handle_unsetenv(char **argv, int *status);
+
 #endif /* SHELL_H */
 

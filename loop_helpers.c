@@ -34,6 +34,10 @@ int read_command(char **line, size_t *len, char **cmd,
 	strip_newline(*line);
 	*cmd = trim_spaces(*line);
 
+	/* NEW: ignore comment-only lines */
+	if ((*cmd)[0] == '#')
+		return (0);
+
 	if ((*cmd)[0] == '\0')
 		return (0);
 
@@ -44,7 +48,7 @@ int read_command(char **line, size_t *len, char **cmd,
 /**
  * run_builtins - handle builtins for current argv
  * @argv: argument vector
- * @status: status for exit builtin
+ * @status: status for exit builtin / last command status
  *
  * Return: 1 if should continue loop, -1 if should exit, 0 otherwise
  */
@@ -54,6 +58,16 @@ int run_builtins(char **argv, int *status)
 		return (-1);
 
 	if (handle_env(argv))
+		return (1);
+
+	/* NEW: advanced builtins */
+	if (handle_cd(argv, status))
+		return (1);
+
+	if (handle_setenv(argv, status))
+		return (1);
+
+	if (handle_unsetenv(argv, status))
 		return (1);
 
 	return (0);
