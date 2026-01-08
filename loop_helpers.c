@@ -1,11 +1,12 @@
 #include "shell.h"
+#include <string.h>
 
 /**
  * read_command - reads and prepares a command line
  * @line: buffer pointer for getline
  * @len: buffer size for getline
  * @cmd: pointer to trimmed command
- * @interactive: 1 if interactive mode
+ * @interactive: 1 if interactive mode (unused here)
  * @line_count: command counter
  *
  * Return: 1 if a command is ready, 0 if empty line, -1 on EOF
@@ -15,8 +16,7 @@ int read_command(char **line, size_t *len, char **cmd,
 {
 	ssize_t nread;
 
-	if (interactive)
-		write(STDOUT_FILENO, PROMPT, sizeof(PROMPT) - 1);
+	(void)interactive;
 
 	nread = getline(line, len, stdin);
 	if (nread == -1)
@@ -102,6 +102,9 @@ int shell_loop(char *av0)
 
 	while (1)
 	{
+		if (interactive)
+			write(STDOUT_FILENO, PROMPT, strlen(PROMPT));
+
 		rc = read_command(&line, &len, &cmd, interactive, &line_count);
 		if (rc == -1)
 		{

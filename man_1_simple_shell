@@ -1,4 +1,5 @@
 .TH SIMPLE_SHELL 1 "January 2026" "hsh" "User Commands"
+
 .SH NAME
 hsh \- simple UNIX command interpreter
 .SH SYNOPSIS
@@ -28,6 +29,16 @@ of the last command is used.
 .TP
 .B env
 Print the current environment variables, one per line.
+.SH LIMITATIONS
+.B hsh
+implements a minimal subset of shell behavior for educational purposes.
+It does not support quoting, escape sequences, pipes, redirections,
+command chaining (such as `;`, `&&`, `||`), wildcard expansion, or job control.
+.SH ENVIRONMENT
+.TP
+.B PATH
+Used to locate executables when a command is not given as an absolute or
+relative path.
 .SH FILES
 .I shell.h
 Header defining shared types and function prototypes.

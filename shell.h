@@ -9,7 +9,7 @@
 #include <errno.h>
 #include <string.h>
 
-#define PROMPT "$"
+#define PROMPT "($)"
 
 extern char **environ;
 
