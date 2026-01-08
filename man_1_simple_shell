@@ -78,6 +78,6 @@ builtin.
 .SH SEE ALSO
 sh(1), execve(2), fork(2), getline(3)
 .SH AUTHORS
-Johnson <jamhalex@gmail.com>
+Johnson Martinez <jamhalex@gmail.com>
 .br
 Joshua Santiago <joshua.d.santiago92@gmail.com>

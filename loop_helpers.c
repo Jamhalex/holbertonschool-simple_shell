@@ -1,5 +1,6 @@
 #include "shell.h"
 #include <string.h>
+#include <errno.h>
 
 /**
  * read_command - reads and prepares a command line
@@ -9,7 +10,7 @@
  * @interactive: 1 if interactive mode (unused here)
  * @line_count: command counter
  *
- * Return: 1 if a command is ready, 0 if empty line, -1 on EOF
+ * Return: 1 if a command is ready, 0 if empty line / interrupted read, -1 on EOF
  */
 int read_command(char **line, size_t *len, char **cmd,
 		int interactive, unsigned int *line_count)
@@ -18,7 +19,15 @@ int read_command(char **line, size_t *len, char **cmd,
 
 	(void)interactive;
 
-	nread = getline(line, len, stdin);
+	/*
+	 * If getline is interrupted by SIGINT, it may fail with errno == EINTR.
+	 * This is not EOF: retry the read.
+	 */
+	do {
+		errno = 0;
+		nread = getline(line, len, stdin);
+	} while (nread == -1 && errno == EINTR);
+
 	if (nread == -1)
 		return (-1);
 
