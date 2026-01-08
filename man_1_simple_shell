@@ -16,7 +16,8 @@ purposes.
 .TP
 .B Interactive
 When stdin is a terminal, a prompt `($) ` is shown and each line is executed
-immediately.
+immediately. Pressing Ctrl+C interrupts the current input line without
+terminating the shell.
 .TP
 .B Non\-interactive
 When input is piped or redirected from a file, commands are processed until
@@ -34,6 +35,8 @@ Print the current environment variables, one per line.
 implements a minimal subset of shell behavior for educational purposes.
 It does not support quoting, escape sequences, pipes, redirections,
 command chaining (such as `;`, `&&`, `||`), wildcard expansion, or job control.
+In interactive mode, pressing Ctrl+C interrupts the current input line
+without terminating the shell.
 .SH ENVIRONMENT
 .TP
 .B PATH

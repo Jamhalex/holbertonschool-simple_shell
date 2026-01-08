@@ -57,6 +57,10 @@ cat script.txt | ./hsh
   - `exit` with no argument exits with the **last command status**.
 - **Non-interactive mode**:
   - Works with pipes/redirection from the parent shell, e.g. `echo "/bin/ls" | ./hsh`
+- **Signal handling (SIGINT / Ctrl+C)**:
+  - In interactive mode, pressing `Ctrl+C` interrupts the current input line
+    without terminating the shell.
+  - A new prompt is displayed and the shell continues running.
 - **Limitations**:
   - Does not support pipes (`|`), quotes, or command chaining.
 
